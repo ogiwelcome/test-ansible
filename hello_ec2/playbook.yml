@@ -2,10 +2,9 @@
 - hosts: server
   become: yes
   tasks:
-    - name: create directory
-      user: ec2-user
-      file:
-        path: /home/ansible/tmp
-        state: directory
-        owner: root
-        mode: 744
+  - name: create directory
+    file:
+      path: /home/ansible/tmp
+      state: directory
+      owner: ec2-user
+      mode: 755
