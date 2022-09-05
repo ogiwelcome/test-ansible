@@ -10,3 +10,7 @@
       yum:
         name: nginx
         state: latest
+    - name: nginx service start
+      service:
+        name: nginx
+        enabled: yes
