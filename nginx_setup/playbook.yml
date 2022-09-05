@@ -3,6 +3,8 @@
   hosts: server
   become: yes
   become_method: sudo
+  vars:
+    ansible_managed: test
   tasks:
     - name: Enable to install NGINX.
       shell: "amazon-linux-extras enable nginx1"
@@ -10,11 +12,28 @@
       yum:
         name: nginx
         state: latest
-    - name: nginx service start
+    - name: copy config file
+      copy:
+        src: files/nginx.conf
+        dest: /etc/nginx/origin
+    - name: enable configration
+      file:
+        dest: /etc/nginx/origin
+        src: /etc/nginx/nginx.conf
+        state: file
+    - name: nginx public directory
+      file:
+        path: /usr/share/nginx/html
+        state: directory
+        owner: root
+        group: root
+        mode: 0755
+    - name: copy index.html
+      template:
+        src: templates/index.html.j2
+        dest: /usr/share/nginx/index.html
+        mode: 0644
+    - name: nginx restart
       service:
         name: nginx
-        enabled: yes
-    - name: nginz service stop
-      service:
-        name: nginx
-        state: stopped
+        state: restarted
