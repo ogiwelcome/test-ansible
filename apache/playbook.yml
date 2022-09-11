@@ -1,0 +1,10 @@
+---
+- name: apache setup
+  hosts: server
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: install apache
+      apt:
+        name: apache2
+        state: latest
